@@ -3,7 +3,24 @@
 <div class="footer-padding"></div>
   <div class="footer">
     <p>Made with ❤️ by Gaurav Shinde</p>
+    <a href="/compose" class="admin-link">Admin login</a>
   </div>
 </div>
 </body>
 </html>
+app.post('/compose/edit/:postId', isAuthenticated, (req, res) => {
+  const postId = req.params.postId;
+
+  post.findByIdAndUpdate(postId, {
+    postTitle: req.body.postTitle,
+    postBody: req.body.postBody
+  })
+    .then(() => {
+      console.log('Post updated successfully');
+      res.redirect('/compose');
+    })
+    .catch(err => {
+      console.error('Error updating post', err);
+      res.status(500).send('Internal Server Error');
+    });
+});
